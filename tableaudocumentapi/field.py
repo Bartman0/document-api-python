@@ -45,6 +45,7 @@ class Field(object):
 
         if column_xml is not None:
             self._initialize_from_column_xml(column_xml)
+            self._xml = column_xml
             # This isn't currently never called because of the way we get the data from the xml,
             # but during the refactor, we might need it.  This is commented out as a reminder
             # if metadata_xml is not None:
@@ -52,6 +53,7 @@ class Field(object):
 
         elif metadata_xml is not None:
             self._initialize_from_metadata_xml(metadata_xml)
+            self._xml = metadata_xml
 
         else:
             raise AttributeError('column_xml or metadata_xml needed to initialize field')
@@ -65,6 +67,16 @@ class Field(object):
             self._apply_attribute(xmldata, field_name, lambda x: xmldata.find('.//{}'.format(metadata_name)).text,
                                   read_name=metadata_name)
         self.apply_metadata(xmldata)
+
+    @classmethod
+    def create_field_xml(cls, caption, datatype, role, field_type, name):
+        column = ET.Element('column')
+        column.set('caption', caption)
+        column.set('datatype', datatype)
+        column.set('role', role)
+        column.set('type', field_type)
+        column.set('name', name)
+        return column
 
     ########################################
     # Special Case methods for construction fields from various sources
@@ -115,6 +127,11 @@ class Field(object):
     def id(self):
         """ Name of the field as specified in the file, usually surrounded by [ ] """
         return self._id
+
+    @property
+    def xml(self):
+        """ XML representation of the field. """
+        return self._xml
 
     @property
     def caption(self):
@@ -171,6 +188,21 @@ class Field(object):
     def description(self):
         """ The contents of the <desc> tag on a field """
         return self._description
+
+    @description.setter
+    def description(self, new_description):
+        """ Set the description of a column field.
+        Args:
+            new_description: The new description of the field. String.
+        """
+        desc = self._xml.find('.//desc')
+        if desc is not None:
+            self._xml.remove(desc)
+        desc = ET.SubElement(self._xml, 'desc')
+        formatted = ET.SubElement(desc, 'formatted-text')
+        run = ET.SubElement(formatted, 'run')
+        run.text = new_description
+        self._description = self._read_description(self._xml)
 
     @property
     def worksheets(self):
