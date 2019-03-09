@@ -138,6 +138,10 @@ class Field(object):
         """ Name of the field as displayed in Tableau unless an aliases is defined """
         return self._caption
 
+    @caption.setter
+    def caption(self, new_caption):
+        self._caption = new_caption
+
     @property
     def alias(self):
         """ Name of the field as displayed in Tableau if the default name isn't wanted """
