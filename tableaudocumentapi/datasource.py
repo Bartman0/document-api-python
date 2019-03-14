@@ -137,6 +137,8 @@ class Datasource(object):
             self._datasourceXML, version=self._version)
         self._connections = self._connection_parser.get_connections()
         self._fields = None
+        self._extract = self._datasourceXML.findall("./extract")
+        self._columns = None
 
     @classmethod
     def from_file(cls, filename):
@@ -228,10 +230,16 @@ class Datasource(object):
             self._fields = self._get_all_fields()
         return self._fields
 
+    @property
+    def columns(self):
+        if not self._columns:
+            self._columns = self._get_column_objects()
+        return self._columns
+
     def _get_all_fields(self):
         # Some columns are represented by `column` tags and others as `metadata-record` tags
         # Find them all and chain them into one dictionary
-        column_field_objects = self._get_column_objects()
+        column_field_objects = self.columns
         existing_column_fields = [x.id for x in column_field_objects]
         metadata_only_field_objects = (x for x in self._get_metadata_objects() if x.id not in existing_column_fields)
         field_objects = itertools.chain(column_field_objects, metadata_only_field_objects)
