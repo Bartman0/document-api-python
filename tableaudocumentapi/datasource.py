@@ -240,16 +240,37 @@ class Datasource(object):
         # Some columns are represented by `column` tags and others as `metadata-record` tags
         # Find them all and chain them into one dictionary
         column_field_objects = self.columns
-        existing_column_fields = [x.id for x in column_field_objects]
-        metadata_only_field_objects = (x for x in self._get_metadata_objects() if x.id not in existing_column_fields)
-        field_objects = itertools.chain(column_field_objects, metadata_only_field_objects)
+        self._existing_column_fields = [x.id for x in column_field_objects]
+        self._metadata_only_field_objects = (x for x in self._get_metadata_objects() if x.id not in self._existing_column_fields)
+        field_objects = itertools.chain(column_field_objects, self._metadata_only_field_objects)
 
         return FieldDictionary({k: v for k, v in field_objects})
 
     def _get_metadata_objects(self):
-        return (_column_object_from_metadata_xml(x)
-                for x in self._datasourceTree.findall(".//metadata-record[@class='column']"))
+        return (_column_object_from_metadata_xml(xml)
+                for xml in self._datasourceTree.findall(".//metadata-record[@class='column']"))
 
     def _get_column_objects(self):
         return [_column_object_from_column_xml(self._datasourceTree, xml)
                 for xml in self._datasourceTree.findall('.//column')]
+
+    def has_extract(self):
+        return len(self._extract) > 0 and self._extract[0].attrib['enabled'] == 'true'
+
+    def process_columns(self):
+        sub_elems = self._datasourceTree.findall('*')
+        last_aliases_index = -1
+        first_column_index = -1
+        for i in range(len(sub_elems)):
+            if sub_elems[i].tag == 'column' and first_column_index < 0:
+                first_column_index = i
+            if sub_elems[i].tag == 'aliases':
+                last_aliases_index = i
+        column_index = max(first_column_index, last_aliases_index + 1)
+        if column_index <= 0:
+            raise LookupError("no column nor aliases element found in the data source")
+        for name, field in self._fields.items():
+            if field.id not in self._existing_column_fields:
+                x = Field.create_field_xml(field.id, field.caption, field.datatype, field.role, field.type)
+                Field.set_description(field.description, x)
+                self._datasourceXML.insert(column_index, x)

@@ -69,7 +69,7 @@ class Field(object):
         self.apply_metadata(xmldata)
 
     @classmethod
-    def create_field_xml(cls, caption, datatype, role, field_type, name):
+    def create_field_xml(cls, name, caption, datatype, role='dimension', field_type='ordinal'):
         column = ET.Element('column')
         column.set('caption', caption)
         column.set('datatype', datatype)
@@ -139,8 +139,9 @@ class Field(object):
         return self._caption
 
     @caption.setter
-    def caption(self, new_caption):
-        self._caption = new_caption
+    def caption(self, caption):
+        self._caption = caption
+        self._xml.set('caption', caption)
 
     @property
     def alias(self):
@@ -156,6 +157,18 @@ class Field(object):
     def role(self):
         """ Dimension or Measure """
         return self._role
+
+    @role.setter
+    def role(self, role):
+        self._role = role
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, type):
+        self._type = type
 
     @property
     def is_quantitative(self):
@@ -199,14 +212,19 @@ class Field(object):
         Args:
             new_description: The new description of the field. String.
         """
-        desc = self._xml.find('.//desc')
-        if desc is not None:
-            self._xml.remove(desc)
-        desc = ET.SubElement(self._xml, 'desc')
-        formatted = ET.SubElement(desc, 'formatted-text')
-        run = ET.SubElement(formatted, 'run')
-        run.text = new_description
+        self.set_description(new_description, self._xml)
         self._description = self._read_description(self._xml)
+
+    @classmethod
+    def set_description(self, new_description, xml):
+        desc = xml.find('.//desc')
+        if desc is not None:
+            xml.remove(desc)
+        if new_description is not None:
+            desc = ET.SubElement(xml, 'desc')
+            formatted = ET.SubElement(desc, 'formatted-text')
+            run = ET.SubElement(formatted, 'run')
+            run.text = new_description
 
     @property
     def worksheets(self):
