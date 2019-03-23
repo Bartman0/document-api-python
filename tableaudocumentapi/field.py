@@ -70,6 +70,12 @@ class Field(object):
 
     @classmethod
     def create_field_xml(cls, name, caption, datatype, role='dimension', field_type='ordinal'):
+        if caption is None:
+            caption = name
+        if role is None:
+            role = 'dimension'
+        if field_type is None:
+            field_type = 'ordinal'
         column = ET.Element('column')
         column.set('caption', caption)
         column.set('datatype', datatype)
