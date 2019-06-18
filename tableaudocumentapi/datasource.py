@@ -5,7 +5,7 @@ import xml.sax.saxutils as sax
 from uuid import uuid4
 
 from tableaudocumentapi import Connection, xfile
-from tableaudocumentapi import Field
+from tableaudocumentapi import Field, DBColumn
 from tableaudocumentapi.multilookup_dict import MultiLookupDict
 from tableaudocumentapi.xfile import xml_open
 
@@ -58,6 +58,11 @@ def _column_object_from_column_xml(root_xml, column_xml):
 def _column_object_from_metadata_xml(metadata_xml):
     field_object = Field.from_metadata_xml(metadata_xml)
     return _ColumnObjectReturnTuple(field_object.id, field_object)
+
+
+def _db_column_object_from_db_column_xml(root_xml, column_xml):
+    field_object = DBColumn.from_column_xml(column_xml)
+    return _ColumnObjectReturnTuple(field_object._key, field_object)
 
 
 def base36encode(number):
@@ -139,6 +144,7 @@ class Datasource(object):
         self._fields = None
         self._extract = self._datasourceXML.findall("./extract")
         self._columns = None
+        self._db_columns = self._get_db_column_objects()
 
     @classmethod
     def from_file(cls, filename):
@@ -236,6 +242,12 @@ class Datasource(object):
             self._columns = self._get_column_objects()
         return self._columns
 
+    @property
+    def db_columns(self):
+        if not self._db_columns:
+            self._db_columns = self._get_db_column_objects()
+        return self._db_columns
+
     def _get_all_fields(self):
         # Some columns are represented by `column` tags and others as `metadata-record` tags
         # Find them all and chain them into one dictionary
@@ -253,6 +265,10 @@ class Datasource(object):
     def _get_column_objects(self):
         return [_column_object_from_column_xml(self._datasourceTree, xml)
                 for xml in self._datasourceTree.findall('.//column')]
+
+    def _get_db_column_objects(self):
+        return dict([_db_column_object_from_db_column_xml(self._datasourceTree, xml)
+                for xml in self._datasourceTree.findall('./connection/cols/map')])
 
     def has_extract(self):
         return len(self._extract) > 0 and self._extract[0].attrib['enabled'] == 'true'
