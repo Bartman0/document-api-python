@@ -29,6 +29,14 @@ class DBColumn(object):
 
         setattr(self, '_{}'.format(attrib), value)
 
+    @property
+    def key(self):
+        return self._key
+
+    @property
+    def value(self):
+        return self._value
+
     @classmethod
     def from_column_xml(cls, xmldata):
         return cls(column_xml=xmldata)
