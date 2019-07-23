@@ -117,6 +117,15 @@ class DataSourceFieldsTDS(unittest.TestCase):
             if os.path.exists(filename):
                 os.unlink(filename)
 
+    def test_datasource_parameters(self):
+        self.assertIsNotNone(self.ds.parameters)
+
+    def test_datasource_parameter_values(self):
+        actuals = self.ds.parameters[0]
+        self.assertEqual(actuals.caption, 'Create empty extract?')
+        self.assertEqual(actuals.name, '[Parameter 1]')
+        self.assertEqual(actuals.value, 'true')
+
 
 class DataSourceFieldsTWB(unittest.TestCase):
 

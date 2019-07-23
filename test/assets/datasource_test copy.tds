@@ -1,15 +1,9 @@
 <?xml version='1.0' encoding='utf-8' ?>
-
-<!-- build 20191.19.0612.2121                               -->
-<datasource formatted-name='datasource_test' inline='true' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
-  <repository-location id='' path='' revision='' />
-  <connection class='federated'>
-    <named-connections>
-      <named-connection caption='foo' name='postgres.1of3kl00aoax5d1a1ejma1397430leaf'>
-        <connection authentication='username-password' class='postgres' ctype-leave-untrimmed='true' dbname='TestV1' odbc-native-protocol='yes' port='5432' server='postgres91.test.tsi.lan' username='test' />
-      </named-connection>
-    </named-connections>
-    <relation connection='postgres.1of3kl00aoax5d1a1ejma1397430leaf' name='xy' table='[public].[xy]' type='table' />
+<datasource caption='foo' formatted-name='postgres.1of3kl00aoax5d1a1ejma1397430' inline='true' source-platform='mac'
+            version='9.3' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <repository-location />
+  <connection authentication='username-password' class='postgres' dbname='TestV1' odbc-native-protocol='yes' port='5432' server='postgres91.test.tsi.lan' username='test'>
+    <relation name='xy' table='[public].[xy]' type='table' />
     <metadata-records>
       <metadata-record class='column'>
         <remote-name>a</remote-name>
@@ -29,7 +23,7 @@
         </attributes>
       </metadata-record>
       <metadata-record class='column'>
-        <remote-name>Today&apos;s Date</remote-name>
+        <remote-name>Today's Date</remote-name>
         <remote-type>130</remote-type>
         <local-name>[Today&apos;s Date]</local-name>
         <parent-name>[xy]</parent-name>
@@ -80,13 +74,9 @@
     </metadata-records>
   </connection>
   <aliases enabled='yes' />
-  <column caption='Empty extract?' datatype='boolean' name='[Calculation_695806157149204480]' role='dimension' type='nominal'>
-    <calculation class='tableau' formula='[Parameters].[Parameter 1] = true' />
-  </column>
   <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
     <calculation class='tableau' formula='1' />
   </column>
-  <column caption='Today&apos;s Date' datatype='string' name='[Today&apos;s Date]' role='dimension' type='nominal' />
   <column caption='A' datatype='string' name='[a]' role='dimension' type='nominal'>
     <desc>
       <formatted-text>
@@ -95,19 +85,11 @@
       </formatted-text>
     </desc>
   </column>
+  <column caption='Today&apos;s Date' datatype='string' name='[Today&apos;s Date]' role='dimension' type='nominal' />
   <column caption='X' datatype='integer' name='[x]' role='measure' type='ordinal' />
   <column caption='Y' datatype='integer' name='[y]' role='measure' type='quantitative' />
-  <layout dim-ordering='alphabetic' dim-percentage='0.468935' measure-ordering='alphabetic' measure-percentage='0.497041' parameter-percentage='0.0340237' show-structure='true' />
+  <layout dim-ordering='alphabetic' dim-percentage='0.5' measure-ordering='alphabetic' measure-percentage='0.5' show-structure='true' />
   <semantic-values>
     <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
   </semantic-values>
-  <datasource-dependencies datasource='Parameters'>
-    <column caption='Create empty extract?' datatype='boolean' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='true'>
-      <calculation class='tableau' formula='true' />
-      <members>
-        <member value='true' />
-        <member value='false' />
-      </members>
-    </column>
-  </datasource-dependencies>
 </datasource>

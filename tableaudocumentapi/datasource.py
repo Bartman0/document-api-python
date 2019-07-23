@@ -5,7 +5,7 @@ import xml.sax.saxutils as sax
 from uuid import uuid4
 
 from tableaudocumentapi import Connection, xfile
-from tableaudocumentapi import Field, DBColumn
+from tableaudocumentapi import Field, DBColumn, Parameter
 from tableaudocumentapi.multilookup_dict import MultiLookupDict
 from tableaudocumentapi.xfile import xml_open
 
@@ -93,6 +93,21 @@ def _make_unique_name(dbclass):
     return name
 
 
+class ParameterParser(object):
+    """Parser for detecting and extracting parameters from a Tableau data source."""
+
+    def __init__(self, datasource_xml, version):
+        self._dsxml = datasource_xml
+        self._dsversion = version
+
+    def _extract_parameters(self):
+        return list(map(Parameter, self._dsxml.findall('./datasource-dependencies[@datasource="Parameters"]/column')))
+
+    def get_parameters(self):
+        self._parameters = self._extract_parameters()
+        return self._parameters
+
+
 class ConnectionParser(object):
     """Parser for detecting and extracting connections from differing Tableau file formats."""
 
@@ -138,11 +153,12 @@ class Datasource(object):
             'formatted-name')  # TDS files don't have a name attribute
         self._version = self._datasourceXML.get('version')
         self._caption = self._datasourceXML.get('caption', '')
-        self._connection_parser = ConnectionParser(
-            self._datasourceXML, version=self._version)
+        self._connection_parser = ConnectionParser(self._datasourceXML, version=self._version)
         self._connections = self._connection_parser.get_connections()
         self._fields = None
         self._extract = self._datasourceXML.findall("./extract")
+        self._parameter_parser = ParameterParser(self._datasourceXML, version=self._version)
+        self._parameters = self._parameter_parser.get_parameters()
         self._columns = None
         self._db_columns = self._get_db_column_objects()
 
@@ -247,6 +263,10 @@ class Datasource(object):
         if not self._db_columns:
             self._db_columns = self._get_db_column_objects()
         return self._db_columns
+
+    @property
+    def parameters(self):
+        return self._parameters
 
     def _get_all_fields(self):
         # Some columns are represented by `column` tags and others as `metadata-record` tags
