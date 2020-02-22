@@ -5,9 +5,10 @@ import xml.sax.saxutils as sax
 from uuid import uuid4
 
 from tableaudocumentapi import Connection, xfile
-from tableaudocumentapi import Field, DBColumn, Parameter
+from tableaudocumentapi import Field, DBColumn, Parameter, Relation
 from tableaudocumentapi.multilookup_dict import MultiLookupDict
 from tableaudocumentapi.xfile import xml_open
+
 
 ########
 # This is needed in order to determine if something is a string or not.  It is necessary because
@@ -162,6 +163,8 @@ class Datasource(object):
         self._columns = None
         self._db_columns = self._get_db_column_objects()
 
+        self._relations = list(map(Relation, self._datasourceXML.findall('./connection/relation')))
+
     @classmethod
     def from_file(cls, filename):
         """Initialize datasource from file (.tds ot .tdsx)"""
@@ -310,3 +313,6 @@ class Datasource(object):
                 x = Field.create_field_xml(field.id, field.caption, field.datatype, field.role, field.type)
                 Field.set_description(field.description, x)
                 self._datasourceXML.insert(column_index, x)
+
+    def get_query(self):
+        return f"{self._relations[0]}"
