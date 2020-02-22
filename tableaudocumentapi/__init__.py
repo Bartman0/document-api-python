@@ -5,6 +5,7 @@ from .relation import Relation
 from .db_column import DBColumn
 from .connection import Connection
 from .parameter import Parameter
+from .extract import Extract
 from .datasource import Datasource, ConnectionParser, ParameterParser
 from .workbook import Workbook
 

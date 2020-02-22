@@ -5,7 +5,7 @@ import xml.sax.saxutils as sax
 from uuid import uuid4
 
 from tableaudocumentapi import Connection, xfile
-from tableaudocumentapi import Field, DBColumn, Parameter, Relation
+from tableaudocumentapi import Field, DBColumn, Parameter, Relation, Extract
 from tableaudocumentapi.multilookup_dict import MultiLookupDict
 from tableaudocumentapi.xfile import xml_open
 
@@ -163,7 +163,8 @@ class Datasource(object):
         self._columns = None
         self._db_columns = self._get_db_column_objects()
 
-        self._relations = list(map(Relation, self._datasourceXML.findall('./connection/relation')))
+        self._relations = list(map(Relation, self._datasourceXML.findall("./connection[@class='federated']/relation")))
+        self._extracts = list(map(Extract, self._datasourceXML.findall("./extract")))
 
     @classmethod
     def from_file(cls, filename):

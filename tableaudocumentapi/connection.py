@@ -16,6 +16,8 @@ class Connection(object):
         self._server = connxml.get('server')
         self._username = connxml.get('username')
         self._authentication = connxml.get('authentication')
+        self._schema = connxml.get('schema')
+        self._tablename = connxml.get('tablename')
         self._class = connxml.get('class')
         self._port = connxml.get('port', None)
         self._query_band = connxml.get('query-band-spec', None)
