@@ -157,7 +157,6 @@ class Datasource(object):
         self._connection_parser = ConnectionParser(self._datasourceXML, version=self._version)
         self._connections = self._connection_parser.get_connections()
         self._fields = None
-        self._extract = self._datasourceXML.findall("./extract")
         self._parameter_parser = ParameterParser(self._datasourceXML, version=self._version)
         self._parameters = self._parameter_parser.get_parameters()
         self._columns = None
@@ -295,7 +294,7 @@ class Datasource(object):
                 for xml in self._datasourceTree.findall('./connection/cols/map')])
 
     def has_extract(self):
-        return len(self._extract) > 0 and self._extract[0].attrib['enabled'] == 'true'
+        return len(self._extracts) > 0 and self._extracts[0].enabled == 'true'
 
     def process_columns(self):
         sub_elems = self._datasourceTree.findall('*')

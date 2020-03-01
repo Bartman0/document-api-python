@@ -11,6 +11,8 @@ _ATTRIBUTES = [
     'alias',        # Name of the field as displayed in Tableau if the default name isn't wanted
     'calculation',  # If this field is a calculated field, this will be the formula
     'description',  # If this field has a description, this will be the description (including formatting tags)
+    'family',
+    'parent'
 ]
 
 _METADATA_ATTRIBUTES = [
@@ -20,7 +22,8 @@ _METADATA_ATTRIBUTES = [
 _METADATA_TO_FIELD_MAP = [
     ('local-name', 'id'),
     ('local-type', 'datatype'),
-    ('remote-alias', 'alias')
+    ('remote-alias', 'alias'),
+    ('parent-name', 'parent')
 ]
 
 
