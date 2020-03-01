@@ -147,6 +147,14 @@ class Field(object):
         """ Name of the field as displayed in Tableau unless an aliases is defined """
         return self._caption
 
+    @property
+    def parent(self):
+        return self._parent
+
+    @property
+    def family(self):
+        return self._family
+
     @caption.setter
     def caption(self, caption):
         self._caption = caption
