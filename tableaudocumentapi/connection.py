@@ -26,6 +26,10 @@ class Connection(object):
     def __repr__(self):
         return "'<Connection server='{}' dbname='{}' @ {}>'".format(self._server, self._dbname, hex(id(self)))
 
+    @property
+    def connection_xml(self):
+        return self._connectionXML
+
     @classmethod
     def from_attributes(cls, server, dbname, username, dbclass, port=None, query_band=None,
                         initial_sql=None, authentication=''):

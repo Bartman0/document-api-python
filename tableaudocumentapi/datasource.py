@@ -120,11 +120,11 @@ class ConnectionParser(object):
         connections = list(map(Connection, self._dsxml.findall('.//named-connections/named-connection/*')))
         # 'sqlproxy' connections (Tableau Server Connections) are not embedded into named-connection elements
         # extract them manually for now
-        connections.extend(map(Connection, self._dsxml.findall("./connection[@class='sqlproxy']")))
+        connections.extend(map(Connection, self._dsxml.findall(".//connection[@class='sqlproxy']")))
         return connections
 
     def _extract_legacy_connection(self):
-        return list(map(Connection, self._dsxml.findall('connection')))
+        return list(map(Connection, self._dsxml.children('connection')))
 
     def get_connections(self):
         """Find and return all connections based on file format version."""
@@ -156,12 +156,13 @@ class Datasource(object):
         self._caption = self._datasourceXML.get('caption', '')
         self._connection_parser = ConnectionParser(self._datasourceXML, version=self._version)
         self._connections = self._connection_parser.get_connections()
+        self._db_columns = self._get_db_column_objects()
+        self._extract_columns = self._get_extract_column_objects()
         self._fields = None
-        self._extract = self._datasourceXML.findall("./extract")
+        self._extract_fields = None
         self._parameter_parser = ParameterParser(self._datasourceXML, version=self._version)
         self._parameters = self._parameter_parser.get_parameters()
         self._columns = None
-        self._db_columns = self._get_db_column_objects()
 
         self._relations = list(map(Relation, self._datasourceXML.findall("./connection[@class='federated']/relation")))
         self._extracts = list(map(Extract, self._datasourceXML.findall("./extract")))
@@ -257,6 +258,12 @@ class Datasource(object):
         return self._fields
 
     @property
+    def extract_fields(self):
+        if not self._extract_fields:
+            self._extract_fields = self._get_extract_fields()
+        return self._extract_fields
+
+    @property
     def columns(self):
         if not self._columns:
             self._columns = self._get_column_objects()
@@ -282,20 +289,32 @@ class Datasource(object):
 
         return FieldDictionary({k: v for k, v in field_objects})
 
+    def _get_extract_fields(self):
+        self._extract_metadata_objects = (x for x in self._get_extract_metadata_objects())
+        return FieldDictionary({k: v for k, v in self._extract_metadata_objects})
+
     def _get_metadata_objects(self):
         return (_column_object_from_metadata_xml(xml)
                 for xml in self._datasourceTree.findall(".//metadata-record[@class='column']"))
 
+    def _get_extract_metadata_objects(self):
+        return (_column_object_from_metadata_xml(xml)
+                for xml in self._datasourceTree.findall(".//extract/connection/metadata-records/metadata-record[@class='column']"))
+
     def _get_column_objects(self):
         return [_column_object_from_column_xml(self._datasourceTree, xml)
-                for xml in self._datasourceTree.findall('.//column')]
+                for xml in self._datasourceTree.findall('./column')]
 
     def _get_db_column_objects(self):
         return dict([_db_column_object_from_db_column_xml(self._datasourceTree, xml)
-                for xml in self._datasourceTree.findall('./connection/cols/map')])
+                for xml in self._datasourceTree.findall('.//connection/cols/map')])
+
+    def _get_extract_column_objects(self):
+        return dict([_db_column_object_from_db_column_xml(self._datasourceTree, xml)
+                for xml in self._datasourceTree.findall('.//extract/connection/cols/map')])
 
     def has_extract(self):
-        return len(self._extract) > 0 and self._extract[0].attrib['enabled'] == 'true'
+        return len(self._extracts) > 0 and self._extracts[0].enabled == 'true'
 
     def process_columns(self):
         sub_elems = self._datasourceTree.findall('*')
