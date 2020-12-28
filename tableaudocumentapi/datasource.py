@@ -237,7 +237,8 @@ class Datasource(object):
 
     @caption.deleter
     def caption(self):
-        del self._datasourceXML.attrib['caption']
+        if 'caption' in self._datasourceXML.attrib:
+            del self._datasourceXML.attrib['caption']
         self._caption = ''
 
     @property

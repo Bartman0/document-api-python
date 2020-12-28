@@ -83,7 +83,7 @@ class DataSourceFieldsTDS(unittest.TestCase):
     def test_datasource_caption(self):
         actual = self.ds.caption
         self.assertIsNotNone(actual)
-        self.assertEqual(actual, 'foo')
+        self.assertEqual(actual, '')
 
     def test_datasource_can_set_caption(self):
         filename = self.get_temp_file('test_datasource_can_set_caption')
