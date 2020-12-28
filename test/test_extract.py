@@ -22,26 +22,39 @@ class ExtractRead(unittest.TestCase):
         self.assertIsNotNone(self.ds.has_extract())
 
     def test_refresh_increment_key(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertEqual('[datum]', self.ds.extract.refresh.increment_key)
 
     def test_refresh_incremental_updates(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertEqual('true', self.ds.extract.refresh.incremental_updates)
 
     def test_refresh_events(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertIsNotNone(self.ds.extract.refresh.refresh_events)
 
     def test_refresh_increment_value(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertEqual(dt.datetime.strptime('2002-02-02', '%Y-%m-%d'),
                          dt.datetime.strptime(self.ds.extract.refresh.refresh_events[1].increment_value, '#%Y-%m-%d#'))
 
     def test_refresh_type(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertEqual('increment', self.ds.extract.refresh.refresh_events[1].refresh_type)
 
     def test_refresh_type(self):
-        ds = Datasource.from_file(TEST_TDS_FILE)
         self.assertEqual(1, self.ds.extract.refresh.refresh_events[1].rows_inserted)
+
+    def test_connection_class(self):
+        self.assertIsNotNone(self.ds.extract.connection.dbclass)
+
+    def test_connection_class_hyper(self):
+        self.assertEqual('hyper', self.ds.extract.connection.dbclass)
+
+    def test_connection_dbname(self):
+        self.assertEqual('/Users/rkooijman/Documents/My Tableau Repository/Datasources/test_data (postgres).hyper',
+                         self.ds.extract.connection.dbname)
+
+    def test_connection_dbname(self):
+        self.assertEqual('/Users/rkooijman/Documents/My Tableau Repository/Datasources/test_data (postgres).hyper',
+                         self.ds.extract.connection.dbname)
+
+    def test_connection_schema(self):
+        self.assertEqual('Extract',
+                         self.ds.extract.connection.schema)
+

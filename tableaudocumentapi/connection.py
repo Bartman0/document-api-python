@@ -208,3 +208,7 @@ class Connection(object):
                 pass
         else:
             self._connectionXML.set('one-time-sql', value)
+
+    @property
+    def schema(self):
+        return self._schema

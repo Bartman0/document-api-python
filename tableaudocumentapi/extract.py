@@ -27,7 +27,7 @@ class Extract(object):
 
     @property
     def connection(self):
-        return self._connection
+        return self._connection[0]
 
     @property
     def refresh(self):
