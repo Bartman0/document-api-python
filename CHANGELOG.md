@@ -1,3 +1,11 @@
+## 10 (December 2020)
+
+* Enhanced extract support
+
+## 09 (March 2020)
+
+* Added extract support
+
 ## 06 (11 January 2017)
 
 * Initial SQL and query banding support (#123)

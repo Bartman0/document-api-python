@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20204.20.1106.0321                               -->
+<datasource formatted-name='federated.0xgkjgh15fucxl10s2b9w05im8w5' inline='true' source-platform='mac' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <_.fcp.ObjectModelEncapsulateLegacy.true...ObjectModelEncapsulateLegacy />
+    <_.fcp.ObjectModelExtractV2.true...ObjectModelExtractV2 />
+    <_.fcp.ObjectModelTableType.true...ObjectModelTableType />
+    <_.fcp.SchemaViewerObjectModel.true...SchemaViewerObjectModel />
+  </document-format-change-manifest>
+  <connection class='federated'>
+    <named-connections>
+      <named-connection caption='localhost' name='postgres.1mcy7xp1u0e0a816u12de126l3uv'>
+        <connection authentication='username-password' class='postgres' dbname='postgres' odbc-native-protocol='' one-time-sql='' port='5432' server='localhost' username='postgres' />
+      </named-connection>
+    </named-connections>
+    <_.fcp.ObjectModelEncapsulateLegacy.false...relation connection='postgres.1mcy7xp1u0e0a816u12de126l3uv' name='test_data' table='[public].[test_data]' type='table' />
+    <_.fcp.ObjectModelEncapsulateLegacy.true...relation connection='postgres.1mcy7xp1u0e0a816u12de126l3uv' name='test_data' table='[public].[test_data]' type='table' />
+    <refresh increment-key='[datum]' incremental-updates='true' />
+    <metadata-records>
+      <metadata-record class='column'>
+        <remote-name>teller</remote-name>
+        <remote-type>3</remote-type>
+        <local-name>[teller]</local-name>
+        <parent-name>[test_data]</parent-name>
+        <remote-alias>teller</remote-alias>
+        <ordinal>1</ordinal>
+        <local-type>integer</local-type>
+        <aggregation>Sum</aggregation>
+        <precision>4</precision>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+        </attributes>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[test_data_B6C0A0D2B74F49438B8D2B62E4A2234E]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+      </metadata-record>
+      <metadata-record class='column'>
+        <remote-name>datum</remote-name>
+        <remote-type>7</remote-type>
+        <local-name>[datum]</local-name>
+        <parent-name>[test_data]</parent-name>
+        <remote-alias>datum</remote-alias>
+        <ordinal>2</ordinal>
+        <local-type>date</local-type>
+        <aggregation>Year</aggregation>
+        <contains-null>true</contains-null>
+        <attributes>
+          <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_DATE&quot;</attribute>
+          <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_DATE&quot;</attribute>
+        </attributes>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[test_data_B6C0A0D2B74F49438B8D2B62E4A2234E]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+      </metadata-record>
+    </metadata-records>
+  </connection>
+  <aliases enabled='yes' />
+  <_.fcp.ObjectModelTableType.true...column caption='test_data' datatype='table' name='[__tableau_internal_object_id__].[test_data_B6C0A0D2B74F49438B8D2B62E4A2234E]' role='measure' type='quantitative' />
+  <column caption='Datum' datatype='date' name='[datum]' role='dimension' type='ordinal' />
+  <column caption='Teller' datatype='integer' name='[teller]' role='measure' type='quantitative' />
+  <extract _.fcp.ObjectModelExtractV2.true...object-id='test_data_B6C0A0D2B74F49438B8D2B62E4A2234E' count='-1' enabled='true' units='records'>
+    <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='/Users/rkooijman/Documents/My Tableau Repository/Datasources/test_data (postgres).hyper' default-settings='yes' schema='Extract' sslmode='' update-time='12/27/2020 10:47:10 PM' username='tableau_internal_user'>
+      <_.fcp.ObjectModelEncapsulateLegacy.false...relation name='Extract' table='[Extract].[Extract]' type='table' />
+      <_.fcp.ObjectModelEncapsulateLegacy.true...relation name='Extract' table='[Extract].[Extract]' type='table' />
+      <refresh increment-key='[datum]' incremental-updates='true'>
+        <refresh-event add-from-file-path='test_data (postgres)' increment-value='#2001-01-01#' refresh-type='create' rows-inserted='1' timestamp-start='2020-12-27 22:46:33.357' />
+        <refresh-event add-from-file-path='test_data (postgres)' increment-value='#2002-02-02#' refresh-type='increment' rows-inserted='1' timestamp-start='2020-12-27 22:47:10.323' />
+      </refresh>
+      <metadata-records>
+        <metadata-record class='column'>
+          <remote-name>teller</remote-name>
+          <remote-type>20</remote-type>
+          <local-name>[teller]</local-name>
+          <parent-name>[Extract]</parent-name>
+          <remote-alias>teller</remote-alias>
+          <ordinal>0</ordinal>
+          <family>test_data</family>
+          <local-type>integer</local-type>
+          <aggregation>Sum</aggregation>
+          <approx-count>2</approx-count>
+          <contains-null>true</contains-null>
+          <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[test_data_B6C0A0D2B74F49438B8D2B62E4A2234E]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+        </metadata-record>
+        <metadata-record class='column'>
+          <remote-name>datum</remote-name>
+          <remote-type>133</remote-type>
+          <local-name>[datum]</local-name>
+          <parent-name>[Extract]</parent-name>
+          <remote-alias>datum</remote-alias>
+          <ordinal>1</ordinal>
+          <family>test_data</family>
+          <local-type>date</local-type>
+          <aggregation>Year</aggregation>
+          <approx-count>2</approx-count>
+          <contains-null>true</contains-null>
+          <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[test_data_B6C0A0D2B74F49438B8D2B62E4A2234E]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+        </metadata-record>
+      </metadata-records>
+    </connection>
+  </extract>
+  <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+  <semantic-values>
+    <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+  </semantic-values>
+  <date-options start-of-week='monday' />
+  <_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+    <objects>
+      <object caption='test_data' id='test_data_B6C0A0D2B74F49438B8D2B62E4A2234E'>
+        <properties context=''>
+          <relation connection='postgres.1mcy7xp1u0e0a816u12de126l3uv' name='test_data' table='[public].[test_data]' type='table' />
+        </properties>
+        <properties context='extract'>
+          <relation name='Extract' table='[Extract].[Extract]' type='table' />
+        </properties>
+      </object>
+    </objects>
+  </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+</datasource>

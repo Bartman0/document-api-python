@@ -157,14 +157,13 @@ class Datasource(object):
         self._connection_parser = ConnectionParser(self._datasourceXML, version=self._version)
         self._connections = self._connection_parser.get_connections()
         self._fields = None
-        self._extract = self._datasourceXML.findall("./extract")
         self._parameter_parser = ParameterParser(self._datasourceXML, version=self._version)
         self._parameters = self._parameter_parser.get_parameters()
         self._columns = None
         self._db_columns = self._get_db_column_objects()
 
         self._relations = list(map(Relation, self._datasourceXML.findall("./connection[@class='federated']/relation")))
-        self._extracts = list(map(Extract, self._datasourceXML.findall("./extract")))
+        self._extract = list(map(Extract, self._datasourceXML.findall("./extract")))
 
     @classmethod
     def from_file(cls, filename):
@@ -272,6 +271,10 @@ class Datasource(object):
     def parameters(self):
         return self._parameters
 
+    @property
+    def extract(self):
+        return self._extract[0]
+
     def _get_all_fields(self):
         # Some columns are represented by `column` tags and others as `metadata-record` tags
         # Find them all and chain them into one dictionary
@@ -295,7 +298,7 @@ class Datasource(object):
                 for xml in self._datasourceTree.findall('./connection/cols/map')])
 
     def has_extract(self):
-        return len(self._extract) > 0 and self._extract[0].attrib['enabled'] == 'true'
+        return len(self._extract) > 0 and self._extract[0].enabled == 'true'
 
     def process_columns(self):
         sub_elems = self._datasourceTree.findall('*')

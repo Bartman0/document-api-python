@@ -1,4 +1,4 @@
-from tableaudocumentapi import DBColumn, Relation, Connection
+from tableaudocumentapi import DBColumn, Relation, Connection, Refresh
 
 
 class Extract(object):
@@ -15,6 +15,7 @@ class Extract(object):
         self._connection = list(map(Connection, self._extractXML.findall('./connection')))
         self._relation = list(map(Relation, self._extractXML.findall('./connection/relation')))
         self._cols = list(map(DBColumn, self._extractXML.findall('./connection/cols/*')))
+        self._refresh = list(map(Refresh, self._extractXML.findall('./connection/refresh')))
 
     @property
     def enabled(self):
@@ -27,3 +28,7 @@ class Extract(object):
     @property
     def connection(self):
         return self._connection
+
+    @property
+    def refresh(self):
+        return self._refresh[0]
