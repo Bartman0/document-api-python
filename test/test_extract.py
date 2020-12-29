@@ -58,3 +58,16 @@ class ExtractRead(unittest.TestCase):
         self.assertEqual('Extract',
                          self.ds.extract.connection.schema)
 
+    def test_set_last_refresh_increment_value(self):
+        filename = os.path.join(TEST_ASSET_DIR, 'set_last_refresh_increment_value.tds')
+        newdate = '#2003-03-03#'
+
+        self.ds.extract.refresh.refresh_events[-1].increment_value = newdate
+        try:
+            self.ds.save_as(filename)
+            ds_new = Datasource.from_file(filename)
+            self.assertEqual(dt.datetime.strptime(newdate, '#%Y-%m-%d#'),
+                             dt.datetime.strptime(ds_new.extract.refresh.refresh_events[1].increment_value, '#%Y-%m-%d#'))
+        finally:
+            if os.path.exists(filename):
+                os.unlink(filename)

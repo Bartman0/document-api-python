@@ -28,3 +28,8 @@ class RefreshEvent(object):
     @property
     def timestamp_start(self):
         return self._timestamp_start
+
+    @increment_value.setter
+    def increment_value(self, value):
+        self._refresh_eventXML.set('increment-value', value)
+        self._increment_value = value
