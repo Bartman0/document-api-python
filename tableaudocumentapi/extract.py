@@ -29,6 +29,11 @@ class Extract(object):
     def connection(self):
         return self._connection[0]
 
+    def has_refresh(self):
+        return len(self._refresh) > 0
+
     @property
     def refresh(self):
+        if not self.has_refresh():
+            return None
         return self._refresh[0]

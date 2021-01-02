@@ -274,6 +274,8 @@ class Datasource(object):
 
     @property
     def extract(self):
+        if not self.has_extract():
+            return None
         return self._extract[0]
 
     def _get_all_fields(self):
